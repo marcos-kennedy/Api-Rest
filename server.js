@@ -6,7 +6,7 @@ const PORT = 3000;
 conexao.connect((error) => {
     if (error) throw error;
     app.listen(PORT, () => {
-        console.log('Banco de dados iniciado com sucesso')
+        console.log('Banco de dados conectado com sucesso')
         console.log(`Servidor iniciado no endereço http://localhost:${PORT}`);
     })
 })
