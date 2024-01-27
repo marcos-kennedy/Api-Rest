@@ -1,9 +1,9 @@
 import express from 'express';
 
 const app = express();
+app.use(express.json());
 
 //Mock
-
 let funcionarios = [
     {id: 1, nome: 'Marcos kennedy', idade: 21, profissao: 'Programador'},
     {id: 2, nome: 'Kênia Santos', idade: 31, profissao: 'Professora'},
@@ -20,4 +20,8 @@ app.get('/funcionarios', (req, res) => {
     res.status(200).send(funcionarios);
 })
 
+app.post('/funcionarios',(req, res)=>{
+    funcionarios.push(req.body);
+    res.status(201).send('Funcionário cadastrado com sucesso');
+})
 export default app;
