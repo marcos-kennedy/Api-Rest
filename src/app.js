@@ -12,12 +12,26 @@ let funcionarios = [
     {id: 5, nome: 'Jary Noronha', idade: 35, profissao: 'Engenheiro'}
 ]
 
+function buscarFuncionarioPorId(id_param){
+    return funcionarios.find(funcionario => funcionario.id == id_param);
+}
+
 app.get('/', (req, res) =>{
     res.send('Olá, Mundo!');
 })
 
 app.get('/funcionarios', (req, res) => {
     res.status(200).send(funcionarios);
+})
+
+app.get('/funcionarios/:id', (req, res) =>{
+    let funcionario = buscarFuncionarioPorId(req.params.id);
+    if (funcionario) {
+        res.status(200).json(funcionario);
+    } else {
+        res.status(404).send('Funcionário não encontrado');
+    }
+    
 })
 
 app.post('/funcionarios',(req, res)=>{
