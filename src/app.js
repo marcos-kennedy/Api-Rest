@@ -47,4 +47,12 @@ app.delete('/funcionarios/:id', (req, res) =>{
     funcionarios.splice(indice, 1);
     res.status(200).send('Funcionário excluído com sucesso');
 })
+
+app.put('/funcionarios/:id', (req, res) =>{
+    let indice = buscarPosicaoDoObjeto(req.params.id);
+    funcionarios[indice].idade = req.body.idade;
+    funcionarios[indice].nome = req.body.nome;
+    funcionarios[indice].profissao = req.body.profissao;
+    res.status(200).json(funcionarios)
+})
 export default app;
