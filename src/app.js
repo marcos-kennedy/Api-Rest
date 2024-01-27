@@ -16,6 +16,10 @@ function buscarFuncionarioPorId(id_param){
     return funcionarios.find(funcionario => funcionario.id == id_param);
 }
 
+function buscarPosicaoDoObjeto(id_param){
+    return funcionarios.findIndex(funcionario => funcionario.id == id_param);
+}
+
 app.get('/', (req, res) =>{
     res.send('Olá, Mundo!');
 })
@@ -30,12 +34,17 @@ app.get('/funcionarios/:id', (req, res) =>{
         res.status(200).json(funcionario);
     } else {
         res.status(404).send('Funcionário não encontrado');
-    }
-    
+    }  
 })
 
 app.post('/funcionarios',(req, res)=>{
     funcionarios.push(req.body);
     res.status(201).send('Funcionário cadastrado com sucesso');
+})
+
+app.delete('/funcionarios/:id', (req, res) =>{
+    let indice = buscarPosicaoDoObjeto(req.params.id);
+    funcionarios.splice(indice, 1);
+    res.status(200).send('Funcionário excluído com sucesso');
 })
 export default app;
