@@ -1,16 +1,8 @@
 import express from 'express';
+import conexao from '../infra/conexao.js';
 
 const app = express();
 app.use(express.json());
-
-//Mock
-let funcionarios = [
-    {id: 1, nome: 'Marcos kennedy', idade: 21, profissao: 'Programador'},
-    {id: 2, nome: 'Kênia Santos', idade: 31, profissao: 'Professora'},
-    {id: 3, nome: 'Maria de Lourdes', idade: 48, profissao: 'Auxiliar de limpeza'},
-    {id: 4, nome: 'Antônio Marcos', idade: 55, profissao: 'Pedreiro'},
-    {id: 5, nome: 'Jary Noronha', idade: 35, profissao: 'Engenheiro'}
-]
 
 function buscarFuncionarioPorId(id_param){
     return funcionarios.find(funcionario => funcionario.id == id_param);
@@ -20,39 +12,51 @@ function buscarPosicaoDoObjeto(id_param){
     return funcionarios.findIndex(funcionario => funcionario.id == id_param);
 }
 
-app.get('/', (req, res) =>{
-    res.send('Olá, Mundo!');
-})
-
+//Rotas
 app.get('/funcionarios', (req, res) => {
-    res.status(200).send(funcionarios);
+    const sql = 'SELECT * FROM funcionarios';
+    conexao.query(sql, (error, result) => {
+        if (error) throw error;
+        res.status(200).json(result);
+    })
 })
 
 app.get('/funcionarios/:id', (req, res) =>{
-    let funcionario = buscarFuncionarioPorId(req.params.id);
-    if (funcionario) {
-        res.status(200).json(funcionario);
-    } else {
-        res.status(404).send('Funcionário não encontrado');
-    }  
+    const id = req.params.id;
+    const sql = 'SELECT * FROM funcionarios WHERE id=?'
+    conexao.query(sql, id, (error, result) =>{
+        if (error) throw error;
+        let linha = result[0];
+        res.status(200).json(linha);
+    })
 })
 
 app.post('/funcionarios',(req, res)=>{
-    funcionarios.push(req.body);
-    res.status(201).send('Funcionário cadastrado com sucesso');
+    const dados = req.body;
+    const sql = 'INSERT INTO funcionarios SET?';
+    conexao.query(sql, dados, (error, result) =>{
+        if(error) throw error;
+        res.status(201).send('Funcionário cadastrado com sucesso');
+    })
 })
 
 app.delete('/funcionarios/:id', (req, res) =>{
-    let indice = buscarPosicaoDoObjeto(req.params.id);
-    funcionarios.splice(indice, 1);
-    res.status(200).send('Funcionário excluído com sucesso');
+    const id = req.params.id;
+    const sql = 'DELETE FROM funcionarios WHERE id=?';
+    conexao.query(sql, id, (error, result) =>{
+        if(error) throw error;
+        res.status(200).send('Funcionário excluído do banco de dados')
+    })
 })
 
 app.put('/funcionarios/:id', (req, res) =>{
-    let indice = buscarPosicaoDoObjeto(req.params.id);
-    funcionarios[indice].idade = req.body.idade;
-    funcionarios[indice].nome = req.body.nome;
-    funcionarios[indice].profissao = req.body.profissao;
-    res.status(200).json(funcionarios)
+    const id = req.params.id;
+    const dados = req.body;
+    const sql = 'UPDATE funcionarios SET?  WHERE id=?'
+    conexao.query(sql, [dados, id], (error, result) =>{
+        if(error) throw error;
+        res.status(200).json(result);
+    })
 })
+
 export default app;

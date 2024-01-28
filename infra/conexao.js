@@ -8,4 +8,9 @@ const conexao = mysql.createConnection({
     database: 'db_funcionarios'
 })
 
+conexao.connect((error) => {
+    if (error) throw error;
+    console.log('Banco de dados conectado com sucesso')
+})
+
 export default conexao;
