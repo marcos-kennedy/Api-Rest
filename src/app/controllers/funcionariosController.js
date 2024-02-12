@@ -1,6 +1,6 @@
 import conexao from '../database/conexao.js';
 
-class FuncionáriosController{
+class FuncionariosController{
     index(req, res) {
         const sql = 'SELECT * FROM funcionarios';
         conexao.query(sql, (error, result) => {
@@ -45,4 +45,4 @@ class FuncionáriosController{
 }
 
 // padrão Singleton
-export default new FuncionáriosController();
+export default new FuncionariosController();
