@@ -1,6 +1,6 @@
 import conexao from '../database/conexao.js';
 
-class FuncionariosRepositoy{
+class FuncionariosRepository{
     create(dados){
         const sql = 'INSERT INTO funcionarios SET?';
         return new Promise((resolve, reject) =>{
@@ -53,4 +53,4 @@ class FuncionariosRepositoy{
     }
 }
 
-export default new FuncionariosRepositoy();
+export default new FuncionariosRepository();
