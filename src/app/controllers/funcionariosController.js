@@ -1,46 +1,30 @@
-import conexao from '../database/conexao.js';
+import FuncionariosRepository from '../repositories/funcionariosRepository.js';
 
 class FuncionariosController{
-    index(req, res) {
-        const sql = 'SELECT * FROM funcionarios';
-        conexao.query(sql, (error, result) => {
-            if (error) throw error;
-            res.status(200).json(result);
-        })
+    async index(req, res) {
+        const result = await FuncionariosRepository.findAll();
+        res.status(200).json(result);
     }
-    show(req, res) {
+    async show(req, res) {
         const id = req.params.id;
-        const sql = 'SELECT * FROM funcionarios WHERE id=?'
-        conexao.query(sql, id, (error, result) =>{
-            if (error) throw error;
-            let linha = result[0];
-            res.status(200).json(linha);
-        })
+        const result = await FuncionariosRepository.findById(id);
+        res.status(200).json(result);
     }
-    store(req, res) {
+    async store(req, res) {
         const dados = req.body;
-        const sql = 'INSERT INTO funcionarios SET?';
-        conexao.query(sql, dados, (error, result) =>{
-            if(error) throw error;
-            res.status(201).send('Funcionário cadastrado com sucesso');
-        })
+        const result = await FuncionariosRepository.create(dados);
+        res.status(201).json(result);
     }
-    update(req, res) {
+    async update(req, res) {
         const id = req.params.id;
         const dados = req.body;
-        const sql = 'UPDATE funcionarios SET?  WHERE id=?'
-        conexao.query(sql, [dados, id], (error, result) =>{
-            if(error) throw error;
-            res.status(200).json(result);
-        })
+        const result = await FuncionariosRepository.update(dados, id);
+        res.status(200).json(result);
     }
-    delete(req, res) {
+    async delete(req, res) {
         const id = req.params.id;
-        const sql = 'DELETE FROM funcionarios WHERE id=?';
-        conexao.query(sql, id, (error, result) =>{
-            if(error) throw error;
-            res.status(200).send('Funcionário excluído com sucesso')
-        })
+        const result = await FuncionariosRepository.delete(id);
+        res.status(200).json(result);
     }
 }
 
