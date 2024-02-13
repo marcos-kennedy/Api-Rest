@@ -1,55 +1,25 @@
-import conexao from '../database/conexao.js';
+import {consulta} from '../database/conexao.js';
 
 class FuncionariosRepository{
     create(dados){
         const sql = 'INSERT INTO funcionarios SET?';
-        return new Promise((resolve, reject) =>{
-            conexao.query(sql, dados, (error, result) =>{
-                if(error) return reject (error);
-                const row = JSON.parse(JSON.stringify(result));
-                return resolve(row);
-            })
-        })
+        return consulta(sql, dados, 'Não foi possível cadastrar funcionário.')
     }
     findAll(){
         const sql = 'SELECT * FROM funcionarios';
-        return new Promise((resolve, reject) =>{
-            conexao.query(sql, (error, result) =>{
-                if (error) return reject(error);
-                const row = JSON.parse(JSON.stringify(result));
-                return resolve(row);
-            })
-        })
+        return consulta(sql, 'Não foi possível listar os funcionários.')
     }
     findById(id_params){
         const sql = 'SELECT * FROM funcionarios WHERE id=?';
-        return new Promise((resolve, reject) =>{
-            conexao.query(sql, id_params, (error, result) =>{
-                if (error) return reject(error);
-                const row = JSON.parse(JSON.stringify(result));
-                return resolve(row);
-            })
-        })
+        return consulta(sql, id_params ,'Não foi possível localizar o funcionário.')
     }
     update(dados, id_params){
         const sql = 'UPDATE funcionarios SET?  WHERE id=?'
-        return new Promise((resolve, reject) =>{
-            conexao.query(sql, [dados, id_params], (error, result) =>{
-                if(error) return reject(error);
-                const row = JSON.parse(JSON.stringify(result));
-                return resolve(row);
-            })
-        })
+        return consulta(sql, [dados, id_params], 'Não foi possível atualizar os dados do funcionário.')
     }
     delete(id_params){
         const sql = 'DELETE FROM funcionarios WHERE id=?';
-        return new Promise((resolve, reject) =>{
-            conexao.query(sql, id_params, (error, result) =>{
-                if(error) return reject (error);
-                const row = JSON.parse(JSON.stringify(result));
-                return resolve(row);
-            })
-        })
+        return consulta(sql, id_params ,'Não foi possível deletar o funcionário.')
     }
 }
 
